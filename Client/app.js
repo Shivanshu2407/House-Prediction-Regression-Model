@@ -11,10 +11,10 @@ function getBHKValue() {
 function onClickedEstimatePrice() {
   console.log("Estimate price button clicked");
   
-  let sqft = document.getElementById("uiSqft").value;
+  let sqft = document.getElementById("uiSqft");
   let bhk = getBHKValue();
   let bathrooms = getBathValue();
-  let location = document.getElementById("uiLocations").value;
+  let location = document.getElementById("uiLocations");
   let estPrice = document.getElementById("uiEstimatedPrice");
 
   if (!sqft || bhk === -1 || bathrooms === -1 || !location) {
@@ -25,13 +25,16 @@ function onClickedEstimatePrice() {
   let url = "http://127.0.0.1:5000/predict_home_price";
 
   $.post(url, {
-      total_sqft: parseFloat(sqft),
+      total_sqft: parseFloat(sqft.value),
       bhk: bhk,
       bath: bathrooms,
-      location: location
+      location: location.value
   }, function(data, status) {
-      console.log("Response received:", data);
-      estPrice.innerHTML = `<h2>${data.estimated_price} Lakh</h2>`;
+      console.log(data.estimated_price);
+      // Divide the estimated price by 10 to convert to Lakh
+      let formattedPrice = (data.estimated_price / 10).toFixed(1);
+      estPrice.innerHTML = "<h2>" + formattedPrice + " Lakh</h2>";
+      console.log(status);
   }).fail(function() {
       estPrice.innerHTML = "<h2>Error fetching price</h2>";
   });
