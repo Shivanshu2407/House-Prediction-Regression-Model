@@ -1,8 +1,11 @@
 from flask import Flask, request, jsonify, send_from_directory
 import os
-from Server.util import get_location_names, get_estimated_price
+from Server.util import get_location_names, get_estimated_price, load_saved_artifacts
 
 app = Flask(__name__, static_folder='Client')
+
+# Initialize the model when the application starts
+load_saved_artifacts()
 
 @app.route('/')
 def serve_client():
