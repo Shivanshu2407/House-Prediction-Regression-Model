@@ -1,6 +1,7 @@
 import pickle
 import json
 import numpy as np
+import os
 from sklearn.linear_model import LinearRegression
 
 __locations = None
@@ -41,7 +42,11 @@ def load_saved_artifacts():
     global __model
 
     try:
-        with open("./artifacts/columns.json", "r") as f:
+        # Get the absolute path to the artifacts directory
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        artifacts_path = os.path.join(os.path.dirname(current_dir), 'artifacts', 'columns.json')
+        
+        with open(artifacts_path, "r") as f:
             __data_columns = json.load(f)['data_columns']
             __locations = __data_columns[3:]  # first 3 columns are sqft, bath, bhk
     except Exception as e:
