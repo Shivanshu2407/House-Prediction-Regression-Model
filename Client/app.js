@@ -22,7 +22,8 @@ function onClickedEstimatePrice() {
       return;
   }
 
-  let url = "/predict_home_price";
+  let url = window.location.origin + "/predict_home_price";
+  console.log("Making API call to:", url);
 
   $.post(url, {
       total_sqft: parseFloat(sqft.value),
@@ -30,22 +31,24 @@ function onClickedEstimatePrice() {
       bath: bathrooms,
       location: location.value
   }, function(data, status) {
-      console.log(data.estimated_price);
+      console.log("API Response:", data);
       // Divide the estimated price by 10 to convert to Lakh
       let formattedPrice = (data.estimated_price / 10).toFixed(1);
       estPrice.innerHTML = "<h2>" + formattedPrice + " Lakh</h2>";
-      console.log(status);
-  }).fail(function() {
+      console.log("API Status:", status);
+  }).fail(function(jqXHR, textStatus, errorThrown) {
+      console.error("API Error:", textStatus, errorThrown);
       estPrice.innerHTML = "<h2>Error fetching price</h2>";
   });
 }
 
 function onPageLoad() {
   console.log("Document loaded");
-  let url = "/get_location_names";
+  let url = window.location.origin + "/get_location_names";
+  console.log("Fetching locations from:", url);
   
   $.get(url, function(data, status) {
-      console.log("Received location data");
+      console.log("Received location data:", data);
       if (data && data.locations) {
           let uiLocations = document.getElementById("uiLocations");
           uiLocations.innerHTML = '<option value="" disabled selected>Choose a Location</option>';
@@ -53,9 +56,14 @@ function onPageLoad() {
               let opt = new Option(location, location);
               uiLocations.add(opt);
           });
+          console.log("Loaded", data.locations.length, "locations");
+      } else {
+          console.error("Invalid data format received:", data);
       }
-  }).fail(function() {
-      console.log("Failed to load locations");
+  }).fail(function(jqXHR, textStatus, errorThrown) {
+      console.error("Failed to load locations:", textStatus, errorThrown);
+      let uiLocations = document.getElementById("uiLocations");
+      uiLocations.innerHTML = '<option value="" disabled selected>Error loading locations</option>';
   });
 }
 
