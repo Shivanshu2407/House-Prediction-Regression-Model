@@ -14,6 +14,11 @@ logger.info("Starting application and loading artifacts...")
 load_saved_artifacts()
 logger.info("Artifacts loaded successfully")
 
+@app.route('/health')
+def health_check():
+    """Health check endpoint for monitoring."""
+    return jsonify({"status": "healthy"}), 200
+
 @app.route('/')
 def serve_client():
     try:
