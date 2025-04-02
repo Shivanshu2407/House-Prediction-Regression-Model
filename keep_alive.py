@@ -22,7 +22,7 @@ logging.basicConfig(
 # Get the app URL from environment variable or use default
 APP_URL = os.getenv('APP_URL', 'https://house-prediction-regression-model.onrender.com').rstrip('/')
 HEALTH_ENDPOINT = urljoin(APP_URL + '/', 'health')
-PING_INTERVAL = 300  # 5 minutes in seconds
+PING_INTERVAL = 180  # 3 minutes in seconds
 MAX_RETRIES = 3
 RETRY_DELAY = 10  # seconds
 
